@@ -25,10 +25,10 @@ router.post('/login', async (req, res) => {
     const ok = await bcrypt.compare(password, hashToCheck);
 
     if (!user || !ok) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid email or password. Please check your credentials.' });
     }
     if (user.status !== 'Active') {
-      return res.status(403).json({ error: 'This account has been deactivated' });
+      return res.status(403).json({ error: 'This account has been deactivated. Please contact your administrator.' });
     }
 
     const token = jwt.sign(
@@ -42,8 +42,8 @@ router.post('/login', async (req, res) => {
       user: { id: user.id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Login failed' });
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Login server error. Please try again later.' });
   }
 });
 

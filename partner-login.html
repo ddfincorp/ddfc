@@ -80,11 +80,18 @@ let authToken = localStorage.getItem('ddfcToken') || null;
 async function api(path, opts={}){
   const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
   if(authToken) headers['Authorization'] = 'Bearer ' + authToken;
-  const res = await fetch(API_BASE + path, Object.assign({}, opts, {headers}));
-  if(res.status === 204) return null;
-  const data = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(data.error || ('Request failed: ' + res.status));
-  return data;
+  try {
+    const res = await fetch(API_BASE + path, Object.assign({}, opts, {headers}));
+    if(res.status === 204) return null;
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(data.error || ('API error: ' + res.status));
+    return data;
+  } catch(err) {
+    if(err.message.includes('Failed to fetch')) {
+      throw new Error('Cannot connect to server. Please check if the backend is running on ' + API_BASE);
+    }
+    throw err;
+  }
 }
 
 
@@ -316,7 +323,9 @@ document.getElementById('loginForm').onsubmit=async ev=>{
    if(user.role==='Super Admin') show('dashboard');
    else show('teamdashboard');
  }catch(err){
-   alert(err.message || 'Invalid email or password.');
+   const msg = err.message || 'Login failed. Please try again.';
+   alert(msg);
+   console.error('Login error:', err);
  }
 };
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.page));
