@@ -39,7 +39,7 @@ For deployment, change that value to your deployed API URL.
 ## Run the frontend
 
 Serve this folder from a local web server (for example VS Code Live Server), rather
-than opening the HTML directly as a `https://github.com/ddfincorp/ddfc.git` URL.
+than opening the HTML directly as a `file://.index.html` URL.
 
 The landing page's **Partner Login** button opens `partner-login.html`, which uses
 `POST /api/auth/login` and the JWT returned by the backend.
