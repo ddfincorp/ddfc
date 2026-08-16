@@ -73,7 +73,9 @@ const LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAHfUAAAgoCAMAAABHQosN
 document.getElementById('loginLogo').src=LOGO; document.getElementById('sideLogo').src=LOGO;
 
 // ---- API integration ----
-const API_BASE = 'http://localhost:4000/api'; // change to your deployed API URL
+// For local testing: http://localhost:4000/api
+// For production: replace with your live backend URL, e.g. https://your-api-domain.com/api
+const API_BASE = 'http://localhost:4000/api';
 let authToken = localStorage.getItem('ddfcToken') || null;
 async function api(path, opts={}){
   const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
